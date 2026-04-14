@@ -1,0 +1,55 @@
+# whatweb (Next generation web scanner)
+
+## Basic Usage
+`whatweb example.com`  
+`whatweb 192.168.1.100`  
+`whatweb http://example.com https://example.org`  
+
+## Aggression Levels
+`whatweb -a 1 example.com`  
+`whatweb -a 3 example.com`  
+`whatweb -a 4 example.com`  
+
+## Input and Enumeration
+`whatweb -i targets.txt`  
+`whatweb --no-errors example.com`  
+
+## Output and Logging
+`whatweb -v example.com`  
+`whatweb example.com --log-brief=output.txt`  
+`whatweb example.com --log-verbose=output.txt`  
+`whatweb example.com --log-xml=output.xml`  
+`whatweb example.com --log-json=output.json`  
+`whatweb example.com --quiet`  
+
+## Proxies and Authentication
+`whatweb --proxy 127.0.0.1:8080 example.com`  
+`whatweb --user admin:password example.com`  
+`whatweb --cookie "session=12345" example.com`  
+`whatweb --header "Authorization: Bearer <token>" example.com`  
+
+## Plugin Control
+`whatweb -p wp-enum example.com`  
+`whatweb -p -wordpress example.com`  
+`whatweb -l`  
+
+## Advanced Options
+`whatweb --custom-plugin my_plugin.rb example.com`  
+`whatweb --max-threads 100 -i targets.txt`  
+
+## Common Flags
+* `-a`, `--aggression` - Set the aggression level (1=stealthy/default, 3=aggressive, 4=heavy)
+* `-i`, `--input-file` - Read targets from a text file
+* `-v`, `--verbose` - Verbose output (includes plugin descriptions and precise hits)
+* `-q`, `--quiet` - Quiet mode (brief output, no standard error messages)
+* `--log-brief` - Log brief, one-line output to a file
+* `--log-verbose` - Log verbose output to a file
+* `--log-json` - Log output in JSON format
+* `--proxy` - Set proxy hostname and port (e.g., `<host>:<port>`)
+* `-u`, `--user` - Basic HTTP authentication (`user:password`)
+* `-c`, `--cookie` - Use a cookie string
+* `-H`, `--header` - Add an HTTP header (e.g., `"Foo: Bar"`)
+* `-p`, `--plugins` - Select a comma-separated list of plugins to run (or disable with `-`)
+* `-l`, `--list-plugins` - List all available plugins
+* `--no-errors` - Suppress error messages
+* `-t`, `--max-threads` - Number of concurrent threads (default is 25)
