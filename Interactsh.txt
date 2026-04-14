@@ -1,0 +1,41 @@
+# Interactsh (Out-of-Band Interaction Testing)
+
+## Basic Usage (Starting the Client)
+`interactsh-client`
+`interactsh-client -v`
+
+## Payload Generation
+`interactsh-client -pi`
+`interactsh-client -n 5`
+
+## Custom Server and Authentication
+`interactsh-client -server "interact.mydomain.com"`
+`interactsh-client -server "interact.mydomain.com" -token "secure_auth_token"`
+
+## Output and Logging
+`interactsh-client -o interactions.txt`
+`interactsh-client -json -o interactions.json`
+
+## Advanced Configuration
+`interactsh-client -poll-interval 5`
+`interactsh-client -dns-only`
+`interactsh-client -http-only`
+`interactsh-client -smtp-only`
+
+## Integrating with Fuzzing Tools (e.g., ffuf for Blind SSRF)
+`interactsh-client -o results.txt & ffuf -u "http://target.com/webhook?url=http://FUZZ" -w interactsh_payloads.txt`
+*(Run interactsh-client in the background or another terminal, then fuzz using the generated payload URL)*
+
+## Common Flags
+* `-server` - Interactsh server to use (default: interact.sh, oast.pro, etc.)
+* `-token` - Authentication token for self-hosted interactsh server
+* `-n` - Number of payload URLs to generate (default 1)
+* `-v` - Verbose mode; shows full HTTP requests/responses and DNS queries
+* `-o` - File to write interaction logs to
+* `-json` - Output interactions in JSONL format
+* `-pi` - Only print the generated payload and exit (useful for scripting)
+* `-poll-interval` - Number of seconds between polling the server (default 5)
+* `-dns-only` - Display only DNS interactions
+* `-http-only` - Display only HTTP interactions
+* `-smtp-only` - Display only SMTP interactions
+* `-sf`, `-session-file` - Store/read session to resume monitoring later
