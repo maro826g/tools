@@ -1,0 +1,69 @@
+# curl (Client URL)
+
+## Basic Usage
+`curl http://example.com`  
+`curl -i http://example.com`  
+`curl -v http://example.com`  
+
+## HTTP Methods
+`curl -X GET http://example.com`  
+`curl -X POST http://example.com`  
+`curl -X PUT http://example.com`  
+`curl -X DELETE http://example.com`  
+`curl -X OPTIONS http://example.com -i`  
+
+## Sending Data (POST/PUT)
+`curl -X POST http://example.com/api -d "param1=value1&param2=value2"`  
+`curl -X POST http://example.com/api -H "Content-Type: application/json" -d '{"key":"value"}'`  
+`curl -X POST http://example.com/upload -F "file=@/path/to/local/file.txt"`  
+
+## Headers and Cookies
+`curl -H "X-Custom-Header: value" http://example.com`  
+`curl -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" http://example.com`  
+`curl -e "http://referer.com" http://example.com`  
+`curl -b "session=abc123; token=xyz" http://example.com`  
+`curl -c cookies.txt http://example.com`  
+`curl -b cookies.txt http://example.com`  
+
+## Authentication
+`curl -u username:password http://example.com`  
+`curl -H "Authorization: Bearer <token>" http://example.com`  
+`curl --ntlm -u user:pass http://example.com`  
+
+## Proxies and Traffic Routing
+`curl -x http://127.0.0.1:8080 http://example.com`  
+`curl -x socks5://127.0.0.1:1080 http://example.com`  
+
+## File Download / Output
+`curl -o output.html http://example.com`  
+`curl -O http://example.com/file.zip`  
+`curl -sL http://example.com/script.sh | bash`  
+
+## SSL / Certificate Bypasses
+`curl -k https://example.com`  
+`curl --cert client.pem:password https://example.com`  
+
+## Advanced / Miscellaneous
+`curl -L http://example.com`  
+`curl -s http://example.com`  
+`curl --path-as-is http://example.com/../../etc/passwd`  
+`curl --limit-rate 100K http://example.com/file.zip`  
+
+## Common Flags
+* `-X` - Specify HTTP request method (GET, POST, PUT, etc.)
+* `-d` - Send data in the request body (automatically sets method to POST if not specified)
+* `-H` - Include a custom header
+* `-A` - Specify the User-Agent string (spoofing)
+* `-b` - Send cookie string or read cookies from file
+* `-c` - Write received cookies to a file
+* `-u` - Server user and password for authentication
+* `-F` - Specify multipart MIME data (useful for file uploads)
+* `-x` - Use the specified proxy (e.g., Burp Suite or Tor)
+* `-L` - Follow HTTP redirects
+* `-i` - Include HTTP response headers in the output
+* `-v` - Verbose output (shows full request and response headers)
+* `-s` - Silent or quiet mode (suppress progress meter or error messages)
+* `-o` - Write output to a specific custom filename
+* `-O` - Write output to a local file named exactly like the remote file
+* `-k` - Allow insecure server connections when using SSL (ignore cert errors)
+* `--path-as-is` - Do not squash `..` sequences in URL path (crucial for path traversal tests)
