@@ -1,0 +1,116 @@
+# Gobuster (Directory, DNS, and VHost Brute Forcer)
+
+## Directory and File Enumeration (dir mode)
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+gobuster dir -u http://example.com:8080 -w wordlist.txt
+gobuster dir -u https://example.com -w wordlist.txt -k
+gobuster dir -u http://example.com -w wordlist.txt -t 50
+gobuster dir -u http://example.com -w wordlist.txt -x php,html,js,txt,bak,zip,xml,json,config,old
+gobuster dir -u http://example.com -w wordlist.txt -x php,asp,aspx,jsp
+gobuster dir -u http://example.com -w wordlist.txt -s 200,301,302,403
+gobuster dir -u http://example.com -w wordlist.txt -b 404,500
+gobuster dir -u http://example.com -w wordlist.txt -o results.txt
+gobuster dir -u http://example.com -w wordlist.txt --no-tls-validation
+gobuster dir -u http://example.com -w wordlist.txt -e
+gobuster dir -u http://example.com -w wordlist.txt -r
+gobuster dir -u http://example.com -w wordlist.txt -q
+gobuster dir -u http://example.com -w wordlist.txt -l
+gobuster dir -u http://example.com -w wordlist.txt --wildcard
+
+## DNS Subdomain Enumeration (dns mode)
+gobuster dns -d example.com -w /usr/share/wordlists/subdomains-top1million-5000.txt
+gobuster dns -d example.com -w wordlist.txt -t 50
+gobuster dns -d example.com -w wordlist.txt -r 8.8.8.8
+gobuster dns -d example.com -w wordlist.txt --show-ips
+gobuster dns -d example.com -w wordlist.txt -o dns_results.txt
+gobuster dns -d example.com -w wordlist.txt --wildcard
+gobuster dns -d example.com -w wordlist.txt -t 100 --show-ips -o subdomains.txt
+
+## Virtual Host Enumeration (vhost mode)
+gobuster vhost -u http://example.com -w wordlist.txt
+gobuster vhost -u http://example.com -w wordlist.txt --append-domain
+gobuster vhost -u http://example.com -w wordlist.txt -t 50
+gobuster vhost -u http://example.com -w wordlist.txt -o vhost_results.txt
+gobuster vhost -u http://192.168.1.1 -w wordlist.txt --append-domain
+gobuster vhost -u https://example.com -w wordlist.txt -k --append-domain
+gobuster vhost -u http://example.com -w wordlist.txt --exclude-length 250
+
+## S3 Bucket Enumeration (s3 mode)
+gobuster s3 -w wordlist.txt
+gobuster s3 -w wordlist.txt -t 50
+gobuster s3 -w wordlist.txt -o s3_results.txt
+gobuster s3 -w wordlist.txt --no-tls-validation
+
+## Google Cloud Storage Bucket Enumeration (gcs mode)
+gobuster gcs -w wordlist.txt
+gobuster gcs -w wordlist.txt -t 50 -o gcs_results.txt
+
+## TFTP Enumeration (tftp mode)
+gobuster tftp -s target.com -w wordlist.txt
+gobuster tftp -s 192.168.1.1 -w wordlist.txt -t 30
+
+## Authenticated Scanning
+gobuster dir -u http://example.com -w wordlist.txt -U admin -P password
+gobuster dir -u http://example.com -w wordlist.txt -c "session=abc123; token=xyz"
+gobuster dir -u http://example.com -w wordlist.txt -H "Authorization: Bearer TOKEN"
+gobuster dir -u http://example.com -w wordlist.txt -H "X-Forwarded-For: 127.0.0.1"
+gobuster dir -u http://example.com -w wordlist.txt -H "Cookie: admin=true"
+
+## Proxy and Traffic Routing
+gobuster dir -u http://example.com -w wordlist.txt --proxy http://127.0.0.1:8080
+gobuster dir -u http://example.com -w wordlist.txt --proxy socks5://127.0.0.1:1080
+gobuster dns -d example.com -w wordlist.txt --proxy http://127.0.0.1:8080
+
+## Bypass and Evasion Techniques
+gobuster dir -u http://example.com -w wordlist.txt -H "X-Forwarded-For: 127.0.0.1" -H "X-Originating-IP: 127.0.0.1"
+gobuster dir -u http://example.com -w wordlist.txt -a "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+gobuster dir -u http://example.com -w wordlist.txt --random-agent
+gobuster dir -u http://example.com -w wordlist.txt -t 1 --delay 500ms
+gobuster dir -u http://example.com -w wordlist.txt -k --no-tls-validation
+
+## Output and Reporting
+gobuster dir -u http://example.com -w wordlist.txt -o output.txt
+gobuster dir -u http://example.com -w wordlist.txt -o output.txt -q
+gobuster dir -u http://example.com -w wordlist.txt -v
+gobuster dir -u http://example.com -w wordlist.txt -l -o results.txt
+gobuster dns -d example.com -w wordlist.txt --show-ips -o dns_output.txt
+
+## Full Enumeration One-Liners
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,html,txt,bak,zip -t 50 -o results.txt
+gobuster dir -u https://example.com -w wordlist.txt -k -t 100 -x php,asp,aspx,js,json,config -b 404,500 -o dirs.txt
+gobuster dns -d example.com -w /usr/share/wordlists/subdomains-top1million-110000.txt -t 100 --show-ips -o subs.txt
+gobuster vhost -u http://example.com -w wordlist.txt --append-domain -t 50 -o vhosts.txt
+gobuster dir -u http://example.com -w wordlist.txt -H "Authorization: Bearer TOKEN" -x php,html -t 40 --proxy http://127.0.0.1:8080 -o auth_scan.txt
+gobuster dir -u http://192.168.1.1 -w /usr/share/wordlists/dirb/big.txt -x php,txt,html,bak -t 30 -s 200,301,302,403 -e -o full.txt
+
+## Common Flags
+- `-u` - Target URL for dir and vhost modes
+- `-d` - Target domain name for dns mode
+- `-w` - Path to the wordlist to use for brute forcing
+- `-t` - Number of concurrent threads (default: 10); increase for faster scans
+- `-x` - File extensions to append to each wordlist entry (comma-separated)
+- `-s` - Whitelist specific HTTP status codes to display (comma-separated)
+- `-b` - Blacklist HTTP status codes to hide from results (comma-separated)
+- `-o` - Save output results to a specified file
+- `-k` / `--no-tls-validation` - Skip TLS/SSL certificate validation for HTTPS targets
+- `-r` - Follow HTTP redirects during directory scanning
+- `-e` - Print full URLs in results instead of relative paths
+- `-l` - Include the length of the response body in output
+- `-q` - Quiet mode; suppress banner and progress updates, show results only
+- `-v` - Verbose mode; display additional information including errors and misses
+- `-c` - Send custom cookies with every request (e.g. session tokens)
+- `-H` - Add a custom HTTP header to every request; can be used multiple times
+- `-U` - Username for HTTP Basic Authentication
+- `-P` - Password for HTTP Basic Authentication
+- `-a` - Set a custom User-Agent string for all requests
+- `--random-agent` - Use a randomly selected User-Agent string per request
+- `--proxy` - Route all traffic through an HTTP or SOCKS5 proxy
+- `--delay` - Add a delay between requests (e.g. `500ms`, `1s`) to reduce detection
+- `--timeout` - HTTP request timeout duration (default: 10s)
+- `--wildcard` - Force continuation of scan even when wildcard DNS responses are detected
+- `--append-domain` - Append the base domain to each vhost wordlist entry automatically
+- `--exclude-length` - Exclude responses of a specific body length from vhost results
+- `--show-ips` - Show resolved IP addresses alongside discovered subdomains in dns mode
+- `-r` - Custom DNS resolver IP address to use for dns mode (e.g. `8.8.8.8`)
+- `-z` - Do not print progress to stdout during scanning
