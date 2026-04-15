@@ -1,0 +1,38 @@
+# Arjun (Hidden Parameter Discovery)
+
+## Basic Usage
+`arjun -u https://target.com/endpoint`
+`arjun -u https://target.com/endpoint -m GET`
+
+## Multi-Target and Fuzzing
+`arjun -i targets.txt`
+`arjun -u https://target.com/endpoint -w /path/to/custom/wordlist.txt`
+
+## Specifying HTTP Methods
+`arjun -u https://target.com/endpoint -m POST`
+`arjun -u https://target.com/endpoint -m JSON`
+`arjun -u https://target.com/endpoint -m XML`
+
+## Headers and Authentication
+`arjun -u https://target.com/endpoint -H "Authorization: Bearer <token>"`
+`arjun -u https://target.com/endpoint -H "Cookie: session=abc1234"`
+
+## Tuning Performance & Rate Limiting
+`arjun -u https://target.com/endpoint -t 10`
+`arjun -u https://target.com/endpoint -d 2`
+
+## Output Results
+`arjun -u https://target.com/endpoint -oJ results.json`
+`arjun -u https://target.com/endpoint -oT results.txt`
+
+## Common Flags
+* `-u` - Target URL
+* `-i` - Import targets from a file (one URL per line)
+* `-m` - HTTP method to use (GET, POST, JSON, XML)
+* `-w` - Path to a custom wordlist (default wordlist is used otherwise)
+* `-H` - Add custom headers (can be used multiple times)
+* `-t` - Number of concurrent threads (default is 2)
+* `-d` - Delay between requests in seconds
+* `-oJ` - Output results to a JSON file
+* `-oT` - Output results to a Text file
+* `--passive` - Collect parameters from passive sources (AlienVault, CommonCrawl, etc.) without sending requests
