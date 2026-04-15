@@ -1,0 +1,118 @@
+# Nikto (Web Server Scanner)
+
+## Basic Scanning
+nikto -h http://example.com
+nikto -h https://example.com
+nikto -h 192.168.1.1
+nikto -h http://example.com:8080
+nikto -h http://example.com -p 8080,8443
+nikto -h http://example.com -p 80,443,8080,8443
+
+## Input from File
+nikto -h targets.txt
+nikto -h targets.txt -o results.txt
+nikto -h targets.txt -Format txt
+
+## SSL and HTTPS
+nikto -h https://example.com -ssl
+nikto -h example.com -p 443 -ssl
+nikto -h example.com -ssl -nossl
+nikto -h https://example.com -ssl -Tuning x
+
+## Authentication
+nikto -h http://example.com -id admin:password
+nikto -h http://example.com -id admin:password123
+nikto -h http://example.com -C "session=abc123; token=xyz"
+
+## Proxy and Traffic Routing
+nikto -h http://example.com -useproxy http://127.0.0.1:8080
+nikto -h http://example.com -useproxy http://127.0.0.1:8080 -ssl
+nikto -h http://example.com -useproxy socks5://127.0.0.1:1080
+
+## Tuning Scan Tests
+nikto -h http://example.com -Tuning 1
+nikto -h http://example.com -Tuning 2
+nikto -h http://example.com -Tuning 3
+nikto -h http://example.com -Tuning 4
+nikto -h http://example.com -Tuning 5
+nikto -h http://example.com -Tuning 6
+nikto -h http://example.com -Tuning 7
+nikto -h http://example.com -Tuning 8
+nikto -h http://example.com -Tuning 9
+nikto -h http://example.com -Tuning 0
+nikto -h http://example.com -Tuning x
+nikto -h http://example.com -Tuning 123
+nikto -h http://example.com -Tuning 1234567890
+
+## Evasion Techniques
+nikto -h http://example.com -evasion 1
+nikto -h http://example.com -evasion 2
+nikto -h http://example.com -evasion 3
+nikto -h http://example.com -evasion 4
+nikto -h http://example.com -evasion 5
+nikto -h http://example.com -evasion 6
+nikto -h http://example.com -evasion 7
+nikto -h http://example.com -evasion 8
+nikto -h http://example.com -evasion 1234
+
+## Plugin Usage
+nikto -h http://example.com -Plugins "headers"
+nikto -h http://example.com -Plugins "shellshock"
+nikto -h http://example.com -Plugins "put_del_test"
+nikto -h http://example.com -Plugins "ms10_070"
+nikto -h http://example.com -Plugins "cgi"
+nikto -h http://example.com -list-plugins
+
+## Output and Reporting
+nikto -h http://example.com -o output.txt -Format txt
+nikto -h http://example.com -o output.xml -Format xml
+nikto -h http://example.com -o output.html -Format htm
+nikto -h http://example.com -o output.csv -Format csv
+nikto -h http://example.com -o output.nbe -Format nbe
+nikto -h http://example.com -o output.json -Format json
+nikto -h http://example.com -Display V
+nikto -h http://example.com -Display 1
+nikto -h http://example.com -Display 2
+nikto -h http://example.com -Display E
+nikto -h http://example.com -Display P
+
+## Timing and Performance
+nikto -h http://example.com -timeout 30
+nikto -h http://example.com -Pause 1
+nikto -h http://example.com -maxtime 60
+nikto -h http://example.com -timeout 10 -maxtime 120
+
+## Virtual Host and Header Manipulation
+nikto -h http://192.168.1.1 -vhost example.com
+nikto -h http://example.com -useragent "Mozilla/5.0 (Windows NT 10.0)"
+nikto -h http://example.com -useragent "Googlebot/2.1"
+
+## Full Enumeration One-Liners
+nikto -h http://example.com -ssl -Tuning 123456789 -o full_results.html -Format htm
+nikto -h http://example.com -id admin:password -useproxy http://127.0.0.1:8080 -o results.xml -Format xml
+nikto -h https://example.com -ssl -evasion 1 -Tuning x -o results.txt -Format txt -Display V
+nikto -h targets.txt -ssl -Tuning 123 -o batch_results.html -Format htm -timeout 30
+nikto -h http://192.168.1.1 -vhost example.com -Plugins "headers;shellshock" -o output.txt
+
+## Common Flags
+- `-h` - Target host; accepts IP, hostname, or URL
+- `-p` - Target port(s); accepts single ports or comma-separated list
+- `-ssl` - Force SSL/HTTPS mode on the connection
+- `-id` - HTTP Basic Authentication credentials in `user:password` format
+- `-C` - Send custom cookies with every request
+- `-useproxy` - Route all traffic through the specified HTTP or SOCKS proxy
+- `-Tuning` - Control which test categories to run; values 0-9 and x select test types (1=Interesting Files, 2=Misconfiguration, 3=Info Disclosure, 4=Injection, 5=Remote File Retrieval, 6=Denial of Service, 7=Remote Shell, 8=Command Execution, 9=SQL Injection, 0=File Upload, x=Reverse Tuning/Exclude)
+- `-evasion` - IDS evasion technique (1=Random URI encoding, 2=Directory self-reference, 3=Premature URL ending, 4=Prepend long random string, 5=Fake parameter, 6=TAB as request spacer, 7=Change the case of the URL, 8=Use Windows path separator)
+- `-Plugins` - Specify individual plugins to run by name; use `-list-plugins` to see all
+- `-list-plugins` - Display all available plugins with descriptions
+- `-vhost` - Set a virtual hostname in the Host header for IP-based scanning
+- `-useragent` - Set a custom User-Agent string for all requests
+- `-o` - Output file path to save scan results
+- `-Format` - Output format: txt, xml, htm, csv, nbe, json
+- `-Display` - Control verbosity of output (V=verbose, 1=redirects, 2=cookies, E=errors, P=HTTP progress)
+- `-timeout` - Per-request connection timeout in seconds (default: 10)
+- `-Pause` - Delay in seconds between each request to reduce detection
+- `-maxtime` - Maximum total time in seconds to run the scan
+- `-nossl` - Disable SSL even on ports that typically use it
+- `-no404` - Disable 404 detection to ignore custom error pages
+- `-update` - Update the plugins and databases from the CIRT.net server
