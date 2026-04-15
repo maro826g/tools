@@ -1,0 +1,48 @@
+# Katana (Web Crawling & Spidering)
+
+## Basic Crawling
+`katana -u https://target.com`
+`katana -list targets.txt`
+
+## Depth and Scope
+`katana -u https://target.com -d 3`
+`katana -u https://target.com -jc`
+
+## Headless Mode (JavaScript Rendering)
+`katana -u https://target.com -hl`
+`katana -u https://target.com -hl -sc`
+
+## Filtering and Extraction
+`katana -u https://target.com -em php,js,json`
+`katana -u https://target.com -f qurl`
+`katana -u https://target.com -mr "admin|dashboard"`
+
+## Headers and Authentication
+`katana -u https://target.com -H "Authorization: Bearer <token>"`
+`katana -u https://target.com -H "Cookie: session=abc1234"`
+
+## Proxies and Rate Limiting
+`katana -u https://target.com -proxy http://127.0.0.1:8080`
+`katana -u https://target.com -rl 150`
+`katana -u https://target.com -c 20`
+
+## Output
+`katana -u https://target.com -o crawled_urls.txt`
+`katana -u https://target.com -j -o crawled_urls.json`
+
+## Common Flags
+* `-u` - Target URL to crawl
+* `-list` - File containing a list of target URLs
+* `-d` - Maximum depth to crawl (default 3)
+* `-hl` - Enable headless mode (uses a real browser to execute JavaScript and find hidden links)
+* `-jc` - Enable JavaScript parsing/crawling (extracts endpoints from JS files)
+* `-em` - Extension match; only show results with these extensions (e.g., `js,php`)
+* `-f` - Field extraction (e.g., `qurl` to only print URLs with query parameters)
+* `-mr` - Match regex; only print URLs matching this pattern
+* `-H` - Add custom headers to requests
+* `-c` - Number of concurrent fetchers/threads (default 10)
+* `-rl` - Rate limit in requests per second (default 150)
+* `-proxy` - Route traffic through a proxy (useful for sending discovered endpoints directly to Burp Suite)
+* `-o` - File to write output
+* `-j` - Output in JSON Lines (JSONL) format
+* `-sc` - Print HTTP status codes alongside the URLs
