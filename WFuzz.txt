@@ -1,0 +1,134 @@
+# WFuzz (Web Application Fuzzer)
+
+## Basic Usage
+wfuzz -c -w wordlist.txt http://example.com/FUZZ
+wfuzz -c -w wordlist.txt http://example.com/FUZZ.php
+wfuzz -c -w wordlist.txt --hc 404 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --sc 200 http://example.com/FUZZ
+wfuzz -c -z file,wordlist.txt http://example.com/FUZZ
+
+## Directory and File Discovery
+wfuzz -c -w wordlist.txt --hc 404 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --sc 200,301,302,403 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 http://example.com/FUZZ.php
+wfuzz -c -w wordlist.txt --hc 404 -z file,extensions.txt http://example.com/FUZZ.FUZ2Z
+wfuzz -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt --hc 404 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 --recursion http://example.com/FUZZ
+
+## Subdomain Enumeration
+wfuzz -c -w wordlist.txt -H "Host: FUZZ.example.com" --hc 400,404 http://example.com
+wfuzz -c -w wordlist.txt -H "Host: FUZZ.example.com" --sc 200 http://192.168.1.1
+
+## GET Parameter Fuzzing
+wfuzz -c -w wordlist.txt --hc 404 "http://example.com/index.php?param=FUZZ"
+wfuzz -c -w wordlist.txt --hc 404 "http://example.com/page.php?id=FUZZ"
+wfuzz -c -w wordlist.txt --sc 200 "http://example.com/search.php?q=FUZZ"
+wfuzz -c -z range,1-1000 --hc 404 "http://example.com/item.php?id=FUZZ"
+
+## POST Data Fuzzing
+wfuzz -c -w wordlist.txt --hc 404 -d "username=FUZZ&password=test" http://example.com/login.php
+wfuzz -c -w wordlist.txt -d "username=admin&password=FUZZ" --hc 401 http://example.com/login.php
+wfuzz -c -w wordlist.txt -d "search=FUZZ" --sc 200 http://example.com/search.php
+wfuzz -c -w wordlist.txt -H "Content-Type: application/json" -d '{"username":"FUZZ","password":"test"}' http://example.com/api/login
+
+## Multi-Payload (Multiple FUZZ Keywords)
+wfuzz -c -w users.txt -w passwords.txt -d "user=FUZZ&pass=FUZ2Z" --hc 401 http://example.com/login.php
+wfuzz -c -w dirs.txt -w extensions.txt --hc 404 "http://example.com/FUZZ.FUZ2Z"
+wfuzz -c -w list1.txt -w list2.txt --hc 404 "http://example.com/FUZZ/FUZ2Z"
+wfuzz -c -w wordlist.txt -w wordlist2.txt "http://example.com/FUZZ?param=FUZ2Z"
+
+## Header and Cookie Fuzzing
+wfuzz -c -w wordlist.txt -H "X-Forwarded-For: FUZZ" --hc 403 http://example.com/admin
+wfuzz -c -w wordlist.txt -H "Authorization: Bearer FUZZ" --sc 200 http://example.com/api/secret
+wfuzz -c -w tokens.txt -b "session=FUZZ" --sc 200 http://example.com/dashboard
+wfuzz -c -w wordlist.txt -H "User-Agent: FUZZ" http://example.com
+
+## Authentication and Session
+wfuzz -c -w wordlist.txt -b "PHPSESSID=abc123" --hc 404 http://example.com/admin/FUZZ
+wfuzz -c -w wordlist.txt -H "Authorization: Bearer TOKEN" --hc 404 http://example.com/api/FUZZ
+wfuzz -c -w wordlist.txt --basic admin:FUZZ http://example.com/protected/FUZZ
+wfuzz -c -w passwords.txt --basic admin:FUZZ --sc 200 http://example.com/admin
+
+## Payload Generators
+wfuzz -c -z range,1-100 --hc 404 "http://example.com/item.php?id=FUZZ"
+wfuzz -c -z range,1-65535 --hc 404 "http://example.com/port.php?p=FUZZ"
+wfuzz -c -z list,admin-user-test-backup --hc 404 http://example.com/FUZZ
+wfuzz -c -z hex,00-ff --hc 404 http://example.com/FUZZ
+wfuzz -c -z permutation,ab --hc 404 http://example.com/FUZZ
+wfuzz -c -z burplog,burp_log.txt http://example.com/FUZZ
+
+## Filter Techniques
+wfuzz -c -w wordlist.txt --hc 404 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --sc 200,301,302 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hl 10 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hh 1234 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hw 10 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hs "Not Found" http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --ss "Welcome" http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --filter "c=200 and l>5" http://example.com/FUZZ
+
+## Proxy and Traffic Routing
+wfuzz -c -w wordlist.txt -p 127.0.0.1:8080 --hc 404 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt -p 127.0.0.1:8080:HTTP --hc 404 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt -p 127.0.0.1:1080:SOCKS5 --hc 404 http://example.com/FUZZ
+
+## Evasion and Bypass
+wfuzz -c -w wordlist.txt -H "X-Forwarded-For: 127.0.0.1" --hc 403 http://example.com/admin/FUZZ
+wfuzz -c -w wordlist.txt -H "X-Originating-IP: 127.0.0.1" --hc 403 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" --hc 404 http://example.com/FUZZ
+wfuzz -c -w 403-headers.txt -H "FUZZ" --sc 200 http://example.com/admin
+
+## Performance Tuning
+wfuzz -c -w wordlist.txt --hc 404 -t 50 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 -t 100 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 -s 1 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 --req-delay 2 http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 --conn-delay 3 http://example.com/FUZZ
+
+## Output and Reporting
+wfuzz -c -w wordlist.txt --hc 404 -f results.txt,raw http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 -f results.html,html http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 -f results.json,json http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 -o results.txt http://example.com/FUZZ
+wfuzz -c -w wordlist.txt --hc 404 -v http://example.com/FUZZ
+
+## Full Attack One-Liners
+wfuzz -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt --hc 404 -t 50 -f results.txt,raw http://example.com/FUZZ
+wfuzz -c -w users.txt -w /usr/share/wordlists/rockyou.txt -d "user=FUZZ&pass=FUZ2Z" --hc 401 -t 20 http://example.com/login.php
+wfuzz -c -w wordlist.txt -H "Host: FUZZ.example.com" --sc 200 -t 50 -f subs.txt,raw http://example.com
+wfuzz -c -w wordlist.txt -b "session=abc123" -H "X-Forwarded-For: 127.0.0.1" --hc 403,404 -t 30 http://example.com/admin/FUZZ
+wfuzz -c -z range,1-10000 --hc 404 --sc 200 -t 100 -f ids.txt,raw "http://example.com/user.php?id=FUZZ"
+wfuzz -c -w wordlist.txt --hc 404 -H "Authorization: Bearer TOKEN" -t 40 -f api.txt,raw http://example.com/api/v1/FUZZ
+
+## Common Flags
+- `-c` - Colorize output for easier reading in terminal
+- `-w` - Wordlist file path; use multiple `-w` flags for multi-payload fuzzing
+- `-z` - Payload type and options; formats include file, range, list, hex, permutation
+- `-d` - Raw POST body data; place `FUZZ` keyword where injection should occur
+- `-H` - Custom HTTP header; supports `FUZZ` keyword for header-based fuzzing; can be used multiple times
+- `-b` - Cookie string to include with each request; supports `FUZZ` keyword
+- `-t` - Number of concurrent threads (default: 10)
+- `-s` - Delay in seconds between requests to reduce detection
+- `--req-delay` - Maximum time in seconds to wait for a request to complete
+- `--conn-delay` - Maximum time in seconds to wait for a connection to be established
+- `-p` - Proxy to route traffic through; format `host:port` or `host:port:TYPE`
+- `--basic` - Use HTTP Basic Authentication; format `user:FUZZ` or `user:password`
+- `--hc` - Hide responses with these HTTP status codes (comma-separated)
+- `--sc` - Show only responses with these HTTP status codes (comma-separated)
+- `--hl` - Hide responses with this specific number of lines
+- `--sl` - Show only responses with this specific number of lines
+- `--hw` - Hide responses with this specific word count
+- `--sw` - Show only responses with this specific word count
+- `--hh` - Hide responses with this specific character/byte length
+- `--sh` - Show only responses with this specific character/byte length
+- `--hs` - Hide responses whose body matches this string or regex
+- `--ss` - Show only responses whose body matches this string or regex
+- `--filter` - Advanced filter using expressions (e.g. `c=200 and l>5`)
+- `--recursion` - Enable recursive directory scanning on discovered paths
+- `-R` - Set the maximum recursion depth level
+- `-f` - Save output to file in specified format; format `filename,type` (raw, html, json)
+- `-o` - Output results to a plain text file
+- `-v` - Verbose mode; show full URL and additional response details
+- `FUZZ` - Primary fuzzing keyword replaced by the first wordlist payload
+- `FUZ2Z` - Second fuzzing keyword replaced by the second wordlist payload
+- `FUZnZ` - nth fuzzing keyword replaced by the nth wordlist payload
